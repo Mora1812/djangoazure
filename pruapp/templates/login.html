@@ -1,0 +1,93 @@
+<!-- =====================================================================
+     TEMPLATE: LOGIN
+     Formulario para iniciar sesión
+     Valida las credenciales contra la base de datos
+     ===================================================================== -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<!-- CSS igual al del formulario original -->
+<style>
+    body {
+        background-color: aqua;
+
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .contenedor {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: blue;
+    }
+
+    .formulario {
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .m-bottom {
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Iniciar Sesión</h1>
+
+        <!-- MENSAJE DE ERROR: Se muestra si las credenciales son incorrectas -->
+        {% if error %}
+        <div style="
+                background: #ffe6e6;
+                border-left: 5px solid #ff4d4d;
+                padding: 12px 18px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                font-family: Arial, sans-serif;
+            ">
+            <p style="
+                    color: #b30000;
+                    font-weight: bold;
+                    margin: 0;
+                    font-size: 15px;
+                ">
+                {{ error }}
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- FORMULARIO DE LOGIN -->
+        <form class="formulario" method="post">
+            {% csrf_token %}
+
+            <label for="username">Usuario:</label>
+            <input type="text" class="m-bottom" id="username" name="username" required>
+
+            <label for="password">Contraseña:</label>
+            <input type="password" class="m-bottom" id="password" name="password" required>
+
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <!-- Link para ir al formulario de registro -->
+        <p style="color: white;">¿No tienes cuenta? <a href="{% url 'formulario' %}" style="color: yellow;">Regístrate
+                aquí</a></p>
+
+    </div>
+
+</body>
+
+</html>

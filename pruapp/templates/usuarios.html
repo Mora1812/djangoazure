@@ -1,0 +1,191 @@
+<!-- =====================================================================
+     TEMPLATE: LISTA DE USUARIOS
+     Muestra todos los usuarios registrados en una tabla
+     Solo accesible después de iniciar sesión
+     Tiene botones para ACTUALIZAR y ELIMINAR cada usuario
+     ===================================================================== -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios Registrados</title>
+</head>
+<style>
+    body {
+        background-color: aqua;
+
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .contenedor {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: blue;
+        padding: 20px;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 20px;
+    }
+
+    .btn-logout {
+        background-color: red;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .tabla-usuarios {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #4a90d9;
+        color: white;
+    }
+
+    /* Estilo para mostrar la imagen circular */
+    .imagen-usuario {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    /* Placeholder cuando el usuario no tiene imagen */
+    .sin-imagen {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+    }
+
+    /* Botón rojo para eliminar */
+    .btn-eliminar {
+        background-color: red;
+        color: white;
+        padding: 5px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    /* Botón verde para actualizar */
+    .btn-actualizar {
+        background-color: green;
+        color: white;
+        padding: 5px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 13px;
+        margin-right: 5px;
+    }
+</style>
+
+<body>
+
+    <div class="contenedor">
+
+        <!-- ENCABEZADO: Muestra el usuario logueado y botón de cerrar sesión -->
+        <div class="header">
+            <h1 style="color: white;">Usuarios Registrados</h1>
+            <div>
+                <!-- {{ usuario_actual }} viene de la vista (views.py) -->
+                <span style="color: white;">Bienvenido, <strong>{{ usuario_actual }}</strong></span>
+
+                <!-- Botón para cerrar sesión - llama a la URL /logout/ -->
+                <a href="{% url 'logout' %}" class="btn-logout">Cerrar Sesión</a>
+            </div>
+        </div>
+
+        <div class="tabla-usuarios">
+
+            <!-- Si hay usuarios, mostrar la tabla -->
+            {% if usuarios %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Usuario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Recorrer cada usuario de la lista -->
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td>
+
+                        <!-- COLUMNA DE IMAGEN -->
+                        <td>
+                            <!-- Si el usuario tiene imagen_url, mostrarla -->
+                            {% if usuario.imagen_url %}
+                            <img src="{{ usuario.imagen_url }}" alt="Imagen" class="imagen-usuario">
+                            {% else %}
+                            <!-- Si no tiene imagen, mostrar un signo de pregunta -->
+                            <div class="sin-imagen">?</div>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ usuario.username }}</td>
+
+                        <!-- COLUMNA DE ACCIONES -->
+                        <td>
+                            <!-- Botón ACTUALIZAR: redirige al formulario de edición -->
+                            <a href="{% url 'actualizar_usuario' usuario.id %}" class="btn-actualizar">Actualizar</a>
+
+                            <!-- Botón ELIMINAR: elimina el usuario (con confirmación) -->
+                            <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn-eliminar"
+                                onclick="return confirm('¿Estás seguro de eliminar a {{ usuario.username }}?')">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <!-- Si no hay usuarios registrados -->
+            <p style="text-align: center;">No hay usuarios registrados.</p>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
